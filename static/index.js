@@ -16,8 +16,8 @@ function updateClock() {
 async function fetchWeather(city = "Stockholm") {
 	try {
 		const response = await fetch(`/weather?city=${encodeURIComponent(city)}`)
-		const data = response.json()
-		if (data.main && data.weather && data.weather.length > 0) {
+		const data = await response.json()
+		if (data.main && data.weather.length > 0) {
 			document.getElementById('weather-city').textContent = data.name;
 			document.getElementById('weather-temp').textContent = Math.round(data.main.temp);
 			document.getElementById('weather-desc').textContent = data.weather[0].main;
