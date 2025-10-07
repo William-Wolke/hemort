@@ -18,9 +18,10 @@ async function fetchWeather(city = "Stockholm") {
 		const response = await fetch(`/weather?city=${encodeURIComponent(city)}`)
 		const data = await response.json()
 		if (data.main && data.weather.length > 0) {
-			document.getElementById('weather-city').textContent = data.name;
 			document.getElementById('weather-temp').textContent = Math.round(data.main.temp);
-			document.getElementById('weather-desc').textContent = data.weather[0].main;
+			const iconId = data.weather[0].icon;
+			const iconUrl = `https://openweathermap.org/img/wn/${iconId}@2x.png`;
+			document.getElementById('weather-icon').src = iconUrl;
 		} else {
 			document.getElementById('weather-widget').textContent = 'Weather unavailable';
 		}
