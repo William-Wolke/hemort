@@ -30,17 +30,17 @@ body {
 }
 #links a {
     color: #fff;
-    background: #444;
-    padding: 10px 20px;
+    background: rgba(0,0,0,0.5);
+    padding: 20px 20px;
     margin: 0 10px;
     text-decoration: none;
     border-radius: 5px;
 }
 #links a:hover {
-    background: #666;
+    background: rgba(0,0,0,0.8);
 }
 #links a img {
-    height: 24px;
+    height: 32px;
     vertical-align: middle;
 }
 
@@ -54,3 +54,28 @@ body {
     z-index: 0;
 }
 
+
+#clock {
+    position: absolute;
+    top: 20px;
+    right: 40px;
+    font-size: 2em;
+    color: white;
+    background: rgba(0,0,0,0.5);
+    padding: 0.3em 0.8em;
+    border-radius: 0.5em;
+    z-index: 2;
+    font-family: monospace;
+}
+
+#weather {
+    position: absolute;
+    top: 70px;
+    right: 40px;
+    background: rgba(0,0,0,0.5);
+    color: white;
+    padding: 0.5em 1em;
+    border-radius: 0.5em;
+    z-index: 2;
+    font-family: sans-serif;
+}
