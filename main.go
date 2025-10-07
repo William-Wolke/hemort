@@ -8,6 +8,16 @@ import (
 	"os"
 )
 
+type WeatherResponse struct {
+	Name string `json:"name"`
+	Main struct {
+		Temp float64 `json:"temp"`
+	} `json:"main"`
+	Weather []struct {
+		Main string `json:"main"`
+	} `json:"weather"`
+}
+
 func main() {
 	err := godotenv.Load()
 	if err != nil {
@@ -25,6 +35,28 @@ func main() {
 		} else {
 			http.ServeFile(w, r, "./static"+path)
 		}
+	})
+
+	http.HandleFunc("/weather", func(w http.ResponseWriter, r *http.Request) {
+		city := r.URL.Query().Get("city")
+		if city == "" {
+			city = "Stockholm"
+		}
+		url := "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric"
+		resp, err := http.Get(url)
+		if err != nil {
+			http.Error(w, "Failed to fetch weather", http.StatusInternalServerError)
+			return
+		}
+		defer resp.Body.Close()
+
+		var data WeatherResponse
+		if err := json.NewDecoder(resp.Body).Decode(&data); err != nil {
+			http.Error(w, "Failed to decode response", http.StatusInternalServerError)
+			return
+		}
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(data)
 	})
 
 	log.Println("Server running on :3000")
