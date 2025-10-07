@@ -6,6 +6,8 @@ import (
 	"log"
 	"net/http"
 	"os"
+	"sync"
+	"time"
 )
 
 type WeatherResponse struct {
@@ -15,7 +17,13 @@ type WeatherResponse struct {
 	} `json:"main"`
 	Weather []struct {
 		Main string `json:"main"`
+		Icon string `json:"icon"`
 	} `json:"weather"`
+}
+
+type cacheEntry struct {
+	data      WeatherResponse
+	timestamp int64
 }
 
 func main() {
@@ -28,6 +36,11 @@ func main() {
 		log.Fatal("OPENWEATHER_API_KEY not set")
 	}
 
+	var (
+		cache      = make(map[string]cacheEntry)
+		cacheMutex = &sync.Mutex{}
+	)
+
 	http.HandleFunc("/", func(w http.ResponseWriter, r *http.Request) {
 		path := r.URL.Path
 		if path == "/" {
@@ -38,9 +51,21 @@ func main() {
 	})
 
 	http.HandleFunc("/weather", func(w http.ResponseWriter, r *http.Request) {
+
 		city := r.URL.Query().Get("city")
 		if city == "" {
 			city = "Stockholm"
+		}
+
+		cacheMutex.Lock()
+		entry, found := cache[city]
+		cacheMutex.Unlock()
+
+		now := time.Now().Unix()
+		if found && now-entry.timestamp < 600 {
+			w.Header().Set("Content-Type", "application/json")
+			json.NewEncoder(w).Encode(entry.data)
+			return
 		}
 		url := "https://api.openweathermap.org/data/2.5/weather?q=" + city + "&appid=" + apiKey + "&units=metric"
 		resp, err := http.Get(url)
@@ -55,6 +80,10 @@ func main() {
 			http.Error(w, "Failed to decode response", http.StatusInternalServerError)
 			return
 		}
+
+		cacheMutex.Lock()
+		cache[city] = cacheEntry{data: data, timestamp: now}
+		cacheMutex.Unlock()
 		w.Header().Set("Content-Type", "application/json")
 		json.NewEncoder(w).Encode(data)
 	})
