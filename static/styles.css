@@ -20,6 +20,11 @@ body {
 }
 #links {
     position: absolute;
+    display: flex;
+    flex-direction: row;
+    flex-wrap: no-wrap;
+    overflow-x: scroll;
+    scroll-snap-type: x mandatory;
     left: 0;
     bottom: 0;
     width: 100vw;
@@ -27,16 +32,32 @@ body {
     padding-bottom: 50px;
     margin-top: 0;
     padding-top: 0;
+    width: 100vw;
 }
-#links a {
-    display: inline-block;
-    color: #fff;
+
+#links li {
+    list-style-type: none;
+    gap: 10%;
     background: rgba(0,0,0,0.5);
     padding: 32px 20px;
     width: 120px;
-    margin: 0 10px;
-    text-decoration: none;
+    height: 60px;
     border-radius: 5px;
+    margin: 0 10px;
+    border-radius: 5px;
+    width: 10vw;
+    scroll-snap-align: center;
+    width: 120px;
+    border-radius: 5px;
+    flex: 0 0 120px;
+}
+#links a {
+    display: block;
+    width: 100%;
+    height: 100%;
+    color: #fff;
+    text-decoration: none;
+    margin: 0 10px;
 }
 #links a:hover {
     background: rgba(0,0,0,0.8);
@@ -66,7 +87,7 @@ body {
     padding: 0.3em 0.4em;
     border-radius: 0.5em;
     z-index: 2;
-    font-family: monospace;
+    font-family: "Montserrat", sans-serif;
 }
 
 #weather-widget {
