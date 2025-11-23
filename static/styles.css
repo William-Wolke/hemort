@@ -37,6 +37,19 @@ body {
     scrollbar-width: none;          /* Firefox */
     -ms-overflow-style: none;       /* IE and Edge */
 }
+
+.fade-hide {
+    opacity: 0;
+    pointer-events: none;
+    transition: opacity 0.5s ease;
+}
+
+.fade-show {
+    opacity: 1;
+    pointer-events: auto;
+    transition: opacity 0.5s ease;
+}
+
 #links::-webkit-scrollbar {
     /* Hide horizontal scrollbar*/
     display: none;                  /* Chrome, Safari, Opera */

@@ -32,11 +32,37 @@ async function fetchWeather(city = "Stockholm") {
 	}
 }
 
-// Clock
+
+function debounceHide(element, timeout = 30000) {
+	if (!element) {
+		return
+	}
+	let timer;
+	function show() {
+		element.classList.add('fade-show');
+		element.classList.remove('fade-hide');
+	}
+	function hide() {
+		element.classList.add('fade-hide');
+		element.classList.remove('fade-show');
+	}
+	function resetTimer() {
+		show();
+		clearTimeout(timer);
+		timer = setTimeout(hide, timeout);
+	}
+	// Listen for user activity
+	['mousemove', 'keydown', 'mousedown', 'touchstart'].forEach(evt =>
+		document.addEventListener(evt, resetTimer)
+	);
+	resetTimer(); // Start timer on load
+}
+
 document.addEventListener("DOMContentLoaded", function() {
 	updateClock();
 	setBingImage();
 	fetchWeather();
+	debounceHide(document.getElementById('links'), 30000);
 	setInterval(updateClock, oneMinute);
 	setInterval(fetchWeather, tenMinutes); // Update every 10 minutes
 	setInterval(setBingImage, tenMinutes); // Change image every minute
