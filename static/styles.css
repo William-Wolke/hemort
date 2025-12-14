@@ -6,6 +6,10 @@ body {
     text-align: center;
     height: 100vh;
     overflow: hidden;
+    font-family: "Montserrat", sans-serif;
+    font-optical-sizing: auto;
+    font-style: normal;
+    background-color: black;
 }
 #background-img {
     width: 100vw;
