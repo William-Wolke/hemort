@@ -7,7 +7,7 @@ body {
     height: 100vh;
     overflow: hidden;
 }
-#bing-img {
+#background-img {
     width: 100vw;
     height: 100vh;
     object-fit: cover;
@@ -16,8 +16,10 @@ body {
     position: absolute;
     top: 0;
     left: 0;
+    object-fit: cover;
     z-index: 0;
 }
+
 #links {
     position: absolute;
     display: flex;
@@ -88,17 +90,7 @@ body {
     height: 48px;
     vertical-align: middle;
 }
-
-#bing-img {
-    position: absolute;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    object-fit: cover;
-    z-index: 0;
 }
-
 
 #clock {
     position: absolute;

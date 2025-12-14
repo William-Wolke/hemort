@@ -1,9 +1,15 @@
 const oneMinute = 1 * 60 * 1000;
 const tenMinutes = 10 * 60 * 1000;
+const fourMinutes = 4 * 60 * 1000;
 // Background image
-async function setBingImage() {
-	const res = await fetch('https://bing.biturl.top/?resolution=1920&format=image');
-	document.getElementById('bing-img').src = res.url;
+async function setBackgroundImage() {
+	try {
+		const res = await fetch('/random-image');
+		const data = await res.json();
+		document.getElementById('background-img').src = data.url;
+	} catch (error) {
+		console.error('Error fetching random image:', error);
+	}
 }
 
 function updateClock() {
@@ -60,13 +66,12 @@ function debounceHide(element, timeout = 30000) {
 
 document.addEventListener("DOMContentLoaded", function() {
 	updateClock();
-	setBingImage();
+	setBackgroundImage();
 	fetchWeather();
 	debounceHide(document.getElementById('links'), 30000);
 	setInterval(updateClock, oneMinute);
 	setInterval(fetchWeather, tenMinutes); // Update every 10 minutes
-	setInterval(setBingImage, tenMinutes); // Change image every minute
-
+	setInterval(setBackgroundImage, fourMinutes); // Change image every 4 minutes 
 });
 
 
