@@ -12,7 +12,7 @@ WORKDIR /app
 COPY --from=builder /app/hemort .
 COPY static ./static
 
-EXPOSE 8080
+EXPOSE 3000
 
 CMD ["./hemort"]
 
