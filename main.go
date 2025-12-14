@@ -4,6 +4,7 @@ import (
 	"encoding/json"
 	"github.com/joho/godotenv"
 	"log"
+	"math/rand"
 	"net/http"
 	"os"
 	"sync"
@@ -29,7 +30,7 @@ type cacheEntry struct {
 func main() {
 	err := godotenv.Load()
 	if err != nil {
-		log.Fatal("Error loading .env file")
+		log.Println("Couldn't load .env file")
 	}
 	apiKey := os.Getenv("OPENWEATHER_API_KEY")
 	if apiKey == "" {
@@ -50,8 +51,19 @@ func main() {
 		}
 	})
 
-	http.HandleFunc("/weather", func(w http.ResponseWriter, r *http.Request) {
+	http.HandleFunc("/random-image", func(w http.ResponseWriter, r *http.Request) {
+		files, err := os.ReadDir("static/images/backgrounds")
+		if err != nil || len(files) == 0 {
+			http.Error(w, "No images found", http.StatusInternalServerError)
+			return
+		}
+		randomFile := files[rand.Intn(len(files))].Name()
+		imageURL := "/images/backgrounds/" + randomFile
+		w.Header().Set("Content-Type", "application/json")
+		json.NewEncoder(w).Encode(map[string]string{"url": imageURL})
+	})
 
+	http.HandleFunc("/weather", func(w http.ResponseWriter, r *http.Request) {
 		city := r.URL.Query().Get("city")
 		if city == "" {
 			city = "Stockholm"
